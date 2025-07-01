@@ -40,10 +40,14 @@ export default function PostForm({ post }) {
                 alert("Please upload a featured image.");
                 return;
             }
-            
+
             const file = await appwriteService.uploadFile(data.image[0]);
 
             if (file) {
+                if (!userData || !userData.$id) {
+                    alert("User not logged in or userId missing.");
+                    return;
+                }
                 const fileId = file.$id;
                 data.featuredImage = fileId;
                 const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id });
